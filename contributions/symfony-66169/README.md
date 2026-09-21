@@ -29,13 +29,17 @@ reads naturally and matches the tone of the rest of the file.
 ## How to submit
 
 ```bash
-# fork symfony/symfony first, then:
-git clone --branch 6.4 https://github.com/<your-fork>/symfony.git
+gh repo fork symfony/symfony --clone
 cd symfony
-git checkout -b validator-id-translations
-git am /path/to/symfony-validator-id-translations.patch
+git checkout -b validator-id-translations 6.4
+git am --keep-non-patch /path/to/symfony-validator-id-translations.patch
+git log -1 --format=%s   # expect: [Validator] Review Indonesian (id) translations
 git push origin validator-id-translations
 ```
+
+`--keep-non-patch` matters: plain `git am` strips the leading `[Validator]` from
+the subject line because it looks like a mail list tag. Symfony's commit message
+convention expects the component in brackets, so dropping it would fail the check.
 
 Then open the PR against `symfony:6.4` using `symfony-pr-description.md`.
 
